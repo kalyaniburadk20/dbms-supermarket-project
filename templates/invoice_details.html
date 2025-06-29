@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Invoice Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='invoice_details.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Invoice Details</h1>
+            <div class="search-container">
+                <input type="text" id="invoiceSearch" placeholder="Search Invoices..." onkeyup="filterInvoices()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Invoice Form -->
+        <h2>Add New Invoice</h2>
+        <form action="/add_invoice" method="POST" class="invoice-form">
+            <label for="inv_id">Invoice ID:</label>
+            <input type="text" name="inv_id" required>
+
+            <label for="cust_id">Customer ID:</label>
+            <input type="text" name="cust_id">
+
+            <label for="amount">Amount:</label>
+            <input type="number" step="0.01" name="amount" required>
+
+            <label for="inv_date">Invoice Date:</label>
+            <input type="date" name="inv_date" required>
+
+            <label for="payment_mode_id">Payment Mode ID:</label>
+            <input type="text" name="payment_mode_id">
+
+            <label for="cashier_id">Cashier ID:</label>
+            <input type="text" name="cashier_id">
+
+            <button type="submit">Add Invoice</button>
+        </form>
+
+        <!-- Invoice Details List Table -->
+        <h2>Invoice List</h2>
+        <form action="/delete_invoices" method="POST"> <!-- Form for deleting invoices -->
+            <table class="invoice-table" id="invoiceTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Invoice ID</th>
+                        <th>Customer ID</th>
+                        <th>Amount</th>
+                        <th>Invoice Date</th>
+                        <th>Payment Mode ID</th>
+                        <th>Cashier ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td><input type="checkbox" name="inv_ids" value="{{ invoice[0] }}"></td> <!-- Checkbox for each invoice -->
+                        <td>{{ invoice[0] }}</td>
+                        <td>{{ invoice[1] }}</td>
+                        <td>{{ invoice[2] }}</td>
+                        <td>{{ invoice[3] }}</td>
+                        <td>{{ invoice[4] }}</td>
+                        <td>{{ invoice[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Invoices</button>
+            <button type="submit" formaction="/edit_invoices" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Invoices</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter invoices in the table
+        function filterInvoices() {
+            const input = document.getElementById('invoiceSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('invoiceTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

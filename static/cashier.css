@@ -1,0 +1,240 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(152, 211, 162, 0.927); 
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(34, 139, 34); /* Dark green */
+    color: white;
+    padding: 1rem 2rem;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(34, 139, 34, 0.3); /* Green shadow */
+}
+
+.header-container h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Logout button */
+.logout-button {
+    background-color: rgb(85, 107, 47); 
+    color: white;
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: rgb(107, 142, 35); /* Slightly lighter olive green */
+}
+
+
+h2{
+    margin-left: 60px;
+    font-size: 35px;
+}
+
+/* Main container styling */
+.invoice-section {
+    width: 96%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #d4d5d3ec;
+    border-radius: 8px;
+    box-shadow:0px 4px 10px 0pxrgb(0, 0, 0);
+}
+
+/* Form Group Styling */
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"], input[type="number"] {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+/* Suggestions box styling */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 33px;
+    background-color: #ffffff;
+    width: 30%;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.suggestions-box div {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.suggestions-box div:hover {
+    background-color: rgb(220, 220, 220); /* Slightly darker gray on hover */
+}
+
+/* Price summary and receipt preview */
+.price-summary, .receipt-preview {
+    background-color: rgb(142, 181, 142); /* Very light green */
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+    text-align: right;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 100, 0, 0.1); /* Light shadow */
+}
+
+.price-summary p, .receipt-preview p {
+    margin: 0.3rem 0;
+}
+
+/* Button styling */
+button {
+    background-color: rgb(34, 139, 34); /* Dark green */
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(23, 195, 86); /* Darker green on hover */
+    color: rgb(19, 40, 30);
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgb(85, 107, 47); /* Olive green */
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#receipt-preview {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    background-color: white;
+    border: 2px solid rgb(85, 107, 47); /* Olive green border */
+    text-align: center;
+    display: none;
+}
+
+.dashboard-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap:2rem;
+    margin: 2rem 0;
+    padding: 0;
+    list-style: none;
+    width: 100%; /* Full width */
+}
+
+.dashboard-links li {
+    flex: 1 1 200px;
+    background-color: rgb(34, 139, 34); /* Olive green */
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    text-align: center;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.dashboard-links li:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    background-color: rgb(23, 195, 86); /* Darker olive on hover */
+}
+
+a{
+    text-decoration: none;
+    color: white ;
+}
+
+#logo{
+        width: 160px;
+}
+    
+#product-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#product-table th, #product-table td {
+    padding: 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 128, 0, 0.2); /* Light green line */
+}
+
+#product-table th {
+    background-color: rgb(34, 139, 34);
+    color: white;
+    font-weight: bold;
+}
+
+#product-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for alternating rows */
+}
+
+#product-table tbody tr:last-child td {
+    border-bottom: none; /* Remove bottom border for last row */
+}
+
+#product-table tbody td {
+    color: #333;
+}
+
+#product-table tr {
+    transition: background-color 0.3s;
+}
+
+#product-table tbody tr:hover {
+    background-color: rgba(220, 255, 220, 0.5); /* Soft highlight on hover */
+}

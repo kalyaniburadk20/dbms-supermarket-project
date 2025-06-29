@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermarket Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <a class="back-link" href="/">
+            <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+        </a>
+        <h1>Supermarket Management System</h1>
+    </div>
+
+    <div class="container">
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/employee" class="box-link">Manage Employees</a>
+            </div>
+            <div class="link-box right-align">
+                <a href="/categories" class="box-link">Categories</a>
+            </div>
+        </div>
+
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/payment_modes" class="box-link">Payment Modes</a>
+            </div>
+            <div class="link-box right-align">
+                <a href="/invoice_details" class="box-link">Invoice Details</a>
+            </div>
+        </div>
+
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/products" class="box-link">Products</a>
+            </div>
+            <div class="link-box right-align">
+                <a href="/buys" class="box-link">Buys</a>
+            </div>
+        </div>
+
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/feedback" class="box-link">Feedback</a>
+            </div>
+            <div class="link-box right-align">
+                <a href="/return_slips" class="box-link">Return Slips</a>
+            </div>
+        </div>
+
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/customer_types" class="box-link">Customer Types</a>
+            </div>
+            <div class="link-box right-align">
+                <a href="/offer_details" class="box-link">Offer Details</a>
+            </div>
+        </div>
+
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/customers" class="box-link">Customers</a>
+            </div>
+            <div class="link-box right-align">
+                <a href="/warehouse" class="box-link">Warehouses</a>
+            </div>
+        </div>
+
+        <div class="link-row">
+            <div class="link-box left-align">
+                <a href="/blocks" class="box-link">Blocks</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

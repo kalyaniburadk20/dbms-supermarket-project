@@ -1,0 +1,163 @@
+/* Base styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Background image styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('AdobeStock_3.jpeg'); /* Replace with your desired image */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Keeps background fixed during scroll */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Overlay for better text visibility */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.582); /* Dark overlay for better contrast */
+    backdrop-filter: blur(2px); /* Slight blur for focus on form */
+    z-index: -1;
+}
+
+/* Welcome text styling */
+h1 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 1s ease-in-out;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 30px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+h3 {
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.849); /* Semi-transparent white */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    animation: slideIn 1s ease-in-out;
+}
+
+/* Input styling */
+form input[type="text"], form input[type="password"] {
+    padding: 15px;
+    font-size: 1rem;
+    border: 1px solid #cce4ff;
+    border-radius: 5px;
+    background-color: #f0f8ff;
+    margin-top: 10px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form input[type="text"]:focus, form input[type="password"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Button styling */
+form button {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
+}
+
+form button:active {
+    transform: scale(1);
+}
+
+/* Message styling */
+ul {
+    list-style-type: none;
+    margin-top: 20px;
+    color: red;
+    animation: fadeIn 1.5s ease;
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translate Y(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Additional effects */
+h1, h2, h3 {
+    animation: bounceIn 1s ease forwards;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 1.2rem;
+    }
+    h3 {
+        font-size: 1.5rem;
+    }
+    form {
+        padding: 20px;
+    }
+}
+
+#logo{
+    width: 300px;
+}
+

@@ -1,0 +1,167 @@
+* {
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f8fb; /* Light blue-gray background */
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Go Back Button Styling */
+.back-link {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.back-link img {
+    width: 40px;
+    height: 40px;
+}
+
+/* Fixed Header styling */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #007bff;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Full width */
+    z-index: 1000;
+    color: white;
+    transition: background-color 0.3s ease;
+    padding: 0 20px; /* Padding on left and right */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Subtle shadow for a 'shining' effect */
+}
+
+.header h1 {
+    color: white;
+    font-weight: bold;
+    margin-left: 600px;
+    font-size: 30px;
+}
+
+/* Main container styling */
+.container {
+    margin-top: 100px; /* Increased space below the header */
+    width: 100%;
+    max-width: 1000px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Form styling */
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    margin-top: 20px; /* Space above the form */
+}
+
+/* Label styling */
+.feedback-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #007bff; /* Blue color for labels */
+}
+
+/* Input styling */
+.feedback-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #cce4ff;
+    border-radius: 5px;
+    background-color: #f0f8ff; /* Light blue background */
+}
+
+/* Focus styling for inputs */
+.feedback-form input:focus {
+    border-color: #007bff; /* Blue focus color */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* Button styling */
+.feedback-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+.feedback-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Search Bar Styling */
+.search-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+#feedbackSearch {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #cce4ff;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f0f8ff;
+}
+
+/* Feedback List Table styling */
+.feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.feedback-table th, .feedback-table td {
+    border: 1px solid #cce4ff;
+    padding: 10px;
+    text-align: left;
+}
+
+.feedback-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.feedback-table tbody tr:nth-child(odd) {
+    background-color: #f4f8fb;
+}
+
+.feedback-table tbody tr:nth-child(even) {
+    background-color: #e9f3ff; /* Slightly lighter blue background */
+}
+
+.feedback-table tbody tr:hover {
+    background-color: #dceeff; /* Light blue on hover */
+}

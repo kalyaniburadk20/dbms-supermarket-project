@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Status</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='track_movement.css') }}"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffffff;
+            padding-top: 50px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Style for the header at the top */
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2903e5;
+            position: fixed;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* Typewriter animation for the three dots */
+        .dots {
+            display: inline-block;
+            font-size: 36px;
+            font-weight: bold;
+            color: #2903e5;
+            margin-left: 10px;
+            white-space: nowrap;
+            animation: typingDots 1s infinite steps(1, end);
+        }
+
+        /* Keyframes for the continuous dots animation */
+        @keyframes typingDots {
+            0% {
+                content: '.';
+            }
+            33% {
+                content: '..';
+            }
+            66% {
+                content: '...';
+            }
+            100% {
+                content: '.';
+            }
+        }
+
+        .animation-container {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            height: 300px;
+            padding: 50px;
+            position: relative;
+            margin-top: 100px; /* Space below the fixed header */
+        }
+
+        .box {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #aa00ff;
+            background-color: #ff4d4d;
+            text-align: center;
+            line-height: 150px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .warehouse {
+            background-color: #154fb9;
+            position: fixed;
+            left: 4%;
+        }
+
+        .block {
+            background-color: #008c79;
+            position: fixed;
+            right:4%;
+        }
+
+        .packet {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #b80047;
+            border-radius: 30%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+
+        .move {
+            animation: movePacket 3.2s forwards ease-in-out;
+        }
+
+        @keyframes movePacket {
+            0% {
+                left: 10%;
+                top: 50%;
+                opacity: 1;
+            }
+            100% {
+                left: 90%;
+                top: 50%;
+                opacity: 1;
+            }
+        }
+
+        .footer {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+            display: none; /* Initially hidden */
+        }
+
+        .success {
+            color: rgb(19, 102, 51);
+        }
+
+        .error {
+            color: rgb(142, 8, 55);
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 id="headerText">Transferring<span id="dots" class="dots">.</span></h1>
+
+    <div class="animation-container">
+        <div class="box warehouse" id="warehouseBox">Warehouse</div>
+        <div class="packet" id="packet"></div>
+        <div class="box block" id="blockBox">Block</div>
+    </div>
+
+    <div id="message" class="footer"></div> <!-- Message will appear in footer -->
+
+    <script>
+        window.onload = () => {
+            const packet = document.getElementById("packet");
+            const message = document.getElementById("message");
+            const headerText = document.getElementById("headerText");
+            const dots = document.getElementById("dots");
+
+            // Check for errors or success
+            const status = "{{ status }}"; // Pass status from backend (success or error)
+            const errorMessage = "{{ error_message }}"; // Pass error message from backend if any
+            
+            // If the transfer is successful
+            if (status === "success") {
+                // Start the packet movement animation
+                setTimeout(() => {
+                    packet.classList.add("move");
+                }, 50); // Start animation after a brief delay
+
+                setTimeout(() => {
+                    // Change the header text and color when the transfer completes
+                    headerText.textContent = "Transfer Successfully Completed!";
+                    headerText.style.color = "rgb(19, 102, 51)"; // Change header text color to green
+
+                    // Show success message in the footer
+                    message.style.display = "block";
+                    message.classList.add("success");
+                    message.textContent = "Transfer Successfully Completed!";
+                }, 4000); // Change text after the animation finishes
+            } else {
+                // If there's an error, display error message
+                headerText.textContent = "Transfer Failed!";
+                headerText.style.color = "rgb(142, 8, 55)"; // Change header text color to red
+                message.style.display = "block";
+                message.classList.add("error");
+                message.textContent = errorMessage;
+            }
+
+            // Redirect to home or other page after a few seconds
+            setTimeout(() => {
+                window.location.href = '/track_movement'; // Redirect after 5 seconds (or any other page)
+            }, 8000); // Adjust redirect time if needed
+        };
+    </script>
+
+</body>
+</html>

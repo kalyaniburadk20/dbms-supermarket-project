@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .suggestion {
+            padding: 8px;
+            background-color: #f1f1f1;
+            margin: 2px;
+            cursor: pointer;
+        }
+
+        .suggestion:hover {
+            background-color: #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        #new-customer-form {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #new-customer-form h3 {
+            margin-top: 0;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        #total-bill {
+            font-size: 1.5em;
+            color: green;
+            font-weight: bold;
+        }
+        .print-download-buttons {
+            margin-top: 20px;
+        }
+
+        .print-download-buttons button {
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        * {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(152, 211, 162, 0.927); 
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(34, 139, 34); /* Dark green */
+    color: white;
+    padding: 1rem 2rem;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(34, 139, 34, 0.3); /* Green shadow */
+}
+
+.header-container h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Logout button */
+.logout-button {
+    background-color: rgb(85, 107, 47); 
+    color: white;
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: rgb(107, 142, 35); /* Slightly lighter olive green */
+}
+
+
+h2{
+    margin-left: 60px;
+    font-size: 35px;
+}
+
+/* Main container styling */
+.invoice-section {
+    width: 96%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #d4d5d3ec;
+    border-radius: 8px;
+    box-shadow:0px 4px 10px 0pxrgb(0, 0, 0);
+}
+
+/* Form Group Styling */
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"], input[type="number"] {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+/* Suggestions box styling */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 33px;
+    background-color: #ffffff;
+    width: 30%;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.suggestions-box div {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.suggestions-box div:hover {
+    background-color: rgb(220, 220, 220); /* Slightly darker gray on hover */
+}
+
+/* Price summary and receipt preview */
+.price-summary, .receipt-preview {
+    background-color: rgb(142, 181, 142); /* Very light green */
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+    text-align: right;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 100, 0, 0.1); /* Light shadow */
+}
+
+.price-summary p, .receipt-preview p {
+    margin: 0.3rem 0;
+}
+
+/* Button styling */
+button {
+    background-color: rgb(34, 139, 34); /* Dark green */
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(23, 195, 86); /* Darker green on hover */
+    color: rgb(19, 40, 30);
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgb(85, 107, 47); /* Olive green */
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#receipt-preview {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    background-color: white;
+    border: 2px solid rgb(85, 107, 47); /* Olive green border */
+    text-align: center;
+    display: none;
+}
+
+.dashboard-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap:2rem;
+    margin: 2rem 0;
+    padding: 0;
+    list-style: none;
+    width: 100%; /* Full width */
+}
+
+.dashboard-links li {
+    flex: 1 1 200px;
+    background-color: rgb(34, 139, 34); /* Olive green */
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    text-align: center;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.dashboard-links li:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    background-color: rgb(23, 195, 86); /* Darker olive on hover */
+}
+
+a{
+    text-decoration: none;
+    color: white ;
+}
+
+#logo{
+        width: 160px;
+}
+    
+#product-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#product-table th, #product-table td {
+    padding: 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 128, 0, 0.2); /* Light green line */
+}
+
+#product-table th {
+    background-color: rgb(34, 139, 34);
+    color: white;
+    font-weight: bold;
+}
+
+#product-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for alternating rows */
+}
+
+#product-table tbody tr:last-child td {
+    border-bottom: none; /* Remove bottom border for last row */
+}
+
+#product-table tbody td {
+    color: #333;
+}
+
+#product-table tr {
+    transition: background-color 0.3s;
+}
+
+#product-table tbody tr:hover {
+    background-color: rgba(220, 255, 220, 0.5); /* Soft highlight on hover */
+}
+
+
+        /* Ensure the suggestions are styled properly */
+#customer-suggestions .suggestion {
+    padding: 8px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+
+#customer-suggestions .suggestion:hover {
+    background-color: #ddd;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Cashier Dashboard</h1>
+
+    <!-- Customer Section -->
+    <div>
+        <label for="customer-name">Customer Name:</label>
+        <input type="text" id="customer-name" oninput="fetchCustomerSuggestions()" placeholder="Enter Customer Name">
+        <div id="customer-suggestions"></div>
+
+        <label for="customer-type">Customer Type:</label>
+        <input type="text" id="customer-type" placeholder="Customer Type" disabled>
+
+        <button id="new-customer-btn" style="display:none" onclick="showNewCustomerForm()">New Customer</button>
+    </div>
+
+    <div id="new-customer-form">
+        <h2>Add New Customer</h2>
+        <form action="/add_customer2" method="POST" class="customer-form">
+            <!-- <label for="customer_id">Customer ID:</label>
+            <input type="text" name="customer_id" required> -->
+
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" name="customer_name" required>
+
+            <label for="customer_contact">Customer Contact:</label>
+            <input type="number" name="customer_contact" required>
+
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" name="date_of_birth" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" required>
+
+            <label for="gender">Gender:</label>
+            <select name="gender" required>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+            </select>
+
+            <label for="customer_type_id">Customer Type ID:</label>
+            <input type="text" name="customer_type_id">
+            
+            <label for="membership_to_from">Membership From:</label>
+            <input type="date" name="membership_to_from" required>
+
+            <label for="membership_to">Membership To:</label>
+            <input type="date" name="membership_to" required>
+
+
+            <button type="submit">Add Customer</button>
+        </form>
+        </div>
+    <div><!-- Display flash message -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+   </div>
+   
+
+    <!-- Product Section -->
+    <div>
+        <label for="product-name">Product Name:</label>
+        <input type="text" id="product-name" oninput="fetchProductSuggestions()" placeholder="Enter Product Name">
+        <div id="product-suggestions"></div>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1" onchange="updatePrice()">
+
+        <label for="price">Price:</label>
+        <input type="text" id="price" readonly>
+
+        <button onclick="addProductToTable()">Add Product</button>
+    </div>
+
+    <!-- Product Table -->
+    <table id="product-table">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Billing Section -->
+    <div>
+        <h3>Total Bill: $<span id="total-bill">0.00</span></h3>
+        <button onclick="generateBill()">Generate Bill</button>
+        <button onclick="sendToCustomer()">Send to Customer</button>
+            <!-- Add a Clear Cart button -->
+    <button onclick="clearCart()">Clear Cart</button>
+    </div>
+   
+    <script>
+        let selectedProductId = '';
+        let selectedProductName = '';
+        let selectedProductPrice = 0;
+        let productsInCart = [];
+
+        // // Fetch customer suggestions
+        // function fetchCustomerSuggestions() {
+        //     const customerName = document.getElementById('customer-name').value;
+        //     if (customerName.length > 0) {
+        //         $.ajax({
+        //             url: '/suggest_customers',
+        //             type: 'GET',
+        //             data: { name: customerName },
+        //             success: function(response) {
+        //                 const suggestions = response.customers || [];
+        //                 let suggestionsHtml = '';
+        //                 if (suggestions.length > 0) {
+        //                     suggestions.forEach(customer => {
+        //                         suggestionsHtml += `<div class="suggestion" onclick="selectCustomer('${customer.customer_id}', '${customer.customer_name}', '${customer.customer_type}')">
+        //                             ${customer.customer_name} - ${customer.customer_type}
+        //                         </div>`;
+        //                     });
+        //                 } else {
+        //                     suggestionsHtml = '<div class="suggestion">No customers found</div>';
+        //                     document.getElementById('new-customer-btn').style.display = 'inline-block';
+        //                 }
+        //                 document.getElementById('customer-suggestions').innerHTML = suggestionsHtml;
+        //             }
+        //         });
+        //     } else {
+        //         document.getElementById('customer-suggestions').innerHTML = '';
+        //         document.getElementById('new-customer-btn').style.display = 'none';
+        //     }
+        // }
+
+        // Fetch customer suggestions
+       
+        function downloadReceipt() {
+            const receiptContent = document.getElementById("receipt-preview").innerHTML;
+            const blob = new Blob([receiptContent], {type: 'application/pdf'});
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = ".pdf";
+            link.click();
+        }
+function fetchCustomerSuggestions() {
+    const customerName = document.getElementById('customer-name').value;
+    if (customerName.length > 0) {
+        $.ajax({
+            url: '/suggest_customers',
+            type: 'GET',
+            data: { name: customerName },
+            success: function(response) {
+                const suggestions = response.customers || [];
+                let suggestionsHtml = '';
+                if (suggestions.length > 0) {
+                    suggestions.forEach(customer => {
+                        suggestionsHtml += `<div class="suggestion" onclick="selectCustomer('${customer.customer_id}', '${customer.customer_name}', '${customer.customer_type}')">
+                            ${customer.customer_name} - ${customer.customer_type}
+                        </div>`;
+                    });
+                } else {
+                    suggestionsHtml = '<div class="suggestion">No customers found</div>';
+                    document.getElementById('new-customer-btn').style.display = 'inline-block';
+                }
+                document.getElementById('customer-suggestions').innerHTML = suggestionsHtml;
+            }
+        });
+    } else {
+        document.getElementById('customer-suggestions').innerHTML = '';
+        document.getElementById('new-customer-btn').style.display = 'none';
+    }
+}
+
+        // Function to select a customer
+        function selectCustomer(customerId, customerName, customerType) {
+    // Set the selected customer details in the input fields
+    document.getElementById('customer-name').value = customerName;
+    document.getElementById('customer-type').value = customerType;
+
+    // Hide the suggestions box once a customer is selected
+    document.getElementById('customer-suggestions').innerHTML = '';
+
+    // Optionally, show the "New Customer" button if no suggestion is selected
+    document.getElementById('new-customer-btn').style.display = 'none';
+}
+
+
+     
+        function fetchProductSuggestions() {
+            const productName = document.getElementById('product-name').value;
+            if (productName.length > 0) {
+                $.ajax({
+                    url: '/suggest_products',
+                    type: 'GET',
+                    data: { name: productName },
+                    success: function(response) {
+                        const suggestions = response.products || [];
+                        let suggestionsHtml = '';
+                        if (suggestions.length > 0) {
+                            suggestions.forEach(product => {
+                                suggestionsHtml += `<div class="suggestion" onclick="selectProduct('${product.product_id}', '${product.name}', ${product.selling_price})">
+                                    ${product.name} - $${product.selling_price}
+                                </div>`;
+                            });
+                        } else {
+                            suggestionsHtml = '<div class="suggestion">No products found</div>';
+                        }
+                        document.getElementById('product-suggestions').innerHTML = suggestionsHtml;
+                    }
+                });
+            } else {
+                document.getElementById('product-suggestions').innerHTML = '';
+            }
+        }
+        function selectProduct(productId, productName, sellingPrice) {
+            document.getElementById('product-name').value = productName;
+            document.getElementById('price').value = sellingPrice;
+            selectedProductId = productId;
+            selectedProductName = productName;
+            selectedProductPrice = sellingPrice;
+
+
+            document.getElementById('product-suggestions').innerHTML = '';
+        }
+
+
+        // Update price based on quantity
+        function updatePrice() {
+            const quantity = document.getElementById('quantity').value;
+            const totalPrice = selectedProductPrice * quantity;
+            document.getElementById('price').value = totalPrice;
+        }
+
+        function addProductToTable() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const total = selectedProductPrice * quantity;
+
+            productsInCart.push({
+                product_id: selectedProductId,
+                product_name: selectedProductName,
+                quantity: quantity,
+                price: selectedProductPrice,
+                total: total
+            });
+
+            refreshProductTable();
+            updateTotalBill();
+             // Clear product fields after adding
+          document.getElementById('product-name').value = '';  // Clear product name
+          document.getElementById('quantity').value = 1;       // Reset quantity to default value
+          document.getElementById('price').value = '';  
+        }
+
+        function refreshProductTable() {
+            const tableBody = document.querySelector('#product-table tbody');
+            tableBody.innerHTML = '';
+            productsInCart.forEach((product,index) => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = product.product_id;
+                row.insertCell(1).textContent = product.product_name;
+                row.insertCell(2).textContent = product.quantity;
+                row.insertCell(3).textContent = `$${product.price.toFixed(2)}`;
+                row.insertCell(4).textContent = `$${product.total.toFixed(2)}`;
+            
+            // Add the Remove button
+        const removeCell = row.insertCell(5);
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => removeProduct(index); // Call removeProduct function
+        removeCell.appendChild(removeButton);
+            });
+        }
+
+        // function updateTotalBill() {
+        //     const total = productsInCart.reduce((sum, product) => sum + product.total, 0);
+        //     document.getElementById('total-bill').textContent = total.toFixed(2);
+        // }
+         // Update the total bill
+         function updateTotalBill() {
+            let total = 0;
+            productsInCart.forEach((product) => {
+                total += product.total;
+            });
+            document.getElementById('total-bill').textContent = total.toFixed(2);
+        }
+
+
+        function showNewCustomerForm() {
+            document.getElementById('new-customer-form').style.display = 'block';
+        }
+
+        function addNewCustomer() {
+            const newCustomer = {
+                name: document.getElementById('new-customer-name').value,
+                contact: document.getElementById('new-customer-contact').value,
+                dob: document.getElementById('new-customer-dob').value,
+                email: document.getElementById('new-customer-email').value,
+                address: document.getElementById('new-customer-address').value,
+                gender: document.getElementById('new-customer-gender').value,
+                type: document.getElementById('new-customer-type').value,
+                membership_from: document.getElementById('new-membership-from').value,
+                membership_to: document.getElementById('new-membership-to').value
+            };
+
+            $.ajax({
+                url: '/add_customer',
+                type: 'POST',
+                data: JSON.stringify(newCustomer),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert(response.message);
+                    document.getElementById('new-customer-form').reset();
+                    document.getElementById('new-customer-form').style.display = 'none';
+                },
+                error: function() {
+                    alert('Failed to add new customer.');
+                }
+            });
+        }
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchCustomerTypes();
+    });
+    // Function to remove product from the cart
+function removeProduct(index) {
+    productsInCart.splice(index, 1); // Remove the product at the specified index
+    refreshProductTable();  // Refresh the table to reflect the changes
+    updateTotalBill(); // Update the total bill after removal
+}    
+// Function to clear the entire cart
+function clearCart() {
+    productsInCart = [];  // Empty the cart array
+    refreshProductTable(); // Refresh the table to remove all products
+    updateTotalBill(); // Reset the total bill to 0
+}
+
+
+
+function generateBill() {
+    if (productsInCart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+    }
+
+    let billHTML = `
+        <html>
+            <head>
+                <style>
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    table, th, td {
+                        border: 1px solid black;
+                    }
+                    th, td {
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                    .total {
+                        font-weight: bold;
+                    }
+                </style>
+            </head>
+            <body>
+                <h2>Bill Details</h2>
+                <table>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price per Unit</th>
+                        <th>Total</th>
+                    </tr>
+    `;
+
+    let totalAmount = 0;
+
+    // Loop through the products in the cart and create rows for each product
+    productsInCart.forEach(product => {
+        billHTML += `
+            <tr>
+                <td>${product.product_name}</td>
+                <td>${product.quantity}</td>
+                <td>$${product.price.toFixed(2)}</td>
+                <td>$${product.total.toFixed(2)}</td>
+            </tr>
+        `;
+        totalAmount += product.total;
+    });
+
+    // Add a row for the total amount
+    billHTML += `
+        <tr>
+            <td colspan="3" class="total">Total Amount</td>
+            <td class="total">$${totalAmount.toFixed(2)}</td>
+        </tr>
+    `;
+
+    billHTML += `
+                </table>
+            </body>
+        </html>
+    `;
+     // Open a new window and print the bill
+    const printWindow = window.open('', '', 'width=600,height=400');
+    printWindow.document.write(billHTML);
+    printWindow.document.write(`
+                <style>
+                    @media print {
+                        .print-download-buttons {
+                            display: none;
+                        }
+                    }
+                </style>
+            `);
+    
+    
+    const buttonsHtml = `
+                <div class="print-download-buttons">
+                    <button onclick="window.print()">Print Bill</button>
+                    <button onclick="downloadBill()">Download Bill</button>
+                </div>
+            `;
+            printWindow.document.write(buttonsHtml);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+}
+
+        
+
+        // Function to send the bill to the customer (Mock functionality)
+        function sendToCustomer() {
+            const billContent = `Customer's Bill: \nTotal: $${document.getElementById('total-bill').textContent}`;
+            alert('Bill sent to customer: ' + billContent);
+            // You could replace this alert with an actual API call to email the bill
+        }
+     
+
+    </script>
+</body>
+</html>

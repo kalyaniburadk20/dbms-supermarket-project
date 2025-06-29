@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Products - RisingBird Supermarket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='order_products.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Order Products - RisingBird Supermarket</h1>
+        <nav>
+            <a href="{{ url_for('warehouse_manager_dashboard') }}">Back to Dashboard</a>
+    
+        </nav>
+    </header>
+
+    <main>
+        <section class="suppliers-section">
+            <h2>Select a Supplier or Platform to Place Orders</h2>
+            <p>Choose a supplier below to access products and place orders for the supermarket:</p>
+            <ul class="supplier-links">
+                <li><a href="https://business.amazon.com" target="_blank">Amazon Business</a></li>
+                <li><a href="https://www.alibaba.com" target="_blank">Alibaba</a></li>
+                <li><a href="https://www.costcobusinessdelivery.com" target="_blank">Costco Wholesale Business Center</a></li>
+                <li><a href="https://www.sysco.com" target="_blank">Sysco</a></li>
+                <li><a href="https://www.walmart.com/business" target="_blank">Walmart Business</a></li>
+               
+                <li><a href="https://www.samsclub.com/wholesale" target="_blank">Wholesale Club (Sam's Club)</a></li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

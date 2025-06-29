@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Blocks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='edit_blocks.css') }}">
+</head>
+<body>
+
+   
+    <div class="header">
+        <a href="/blocks" class="back-link">
+            <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Go Back">
+        </a>    
+        <h1>Edit Blocks</h1>
+    </div>
+
+    <div class="container">
+        <form action="/update_blocks" method="POST">
+            {% for block in blocks %}
+            <div class="block-edit">
+                <h3>Block ID: {{ block[0] }}</h3>
+
+                <label>Block Name:</label>
+                <input type="text" name="name-{{ block[0] }}" value="{{ block[1] }}" required>
+
+                <label>In-Charge Employee ID:</label>
+                <input type="text" name="name-{{ block[0] }}" value="{{ block[2] }}" required>
+                
+            </div>
+            <hr>
+            {% endfor %}
+            <button type="submit" style="background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Update Blocks</button>
+        </form>
+    </div>
+
+</body>
+</html>

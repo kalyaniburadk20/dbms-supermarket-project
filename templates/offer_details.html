@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Offers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='offers.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Offers</h1>
+            <div class="search-container">
+                <input type="text" id="offerSearch" placeholder="Search Offers..." onkeyup="filterOffers()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Offer Form -->
+        <h2>Add New Offer</h2>
+        <form action="/add_offer" method="POST" class="offer-form">
+            <label for="offers_id">Offer ID:</label>
+            <input type="text" name="offers_id" required maxlength="50">
+
+            <label for="offers_type">Offer Type:</label>
+            <input type="text" name="offers_type" required maxlength="50">
+
+            <label for="offers_details">Offer Details:</label>
+            <input type="text" name="offers_details" required maxlength="50">
+
+            <label for="offers_start_date">Start Date:</label>
+            <input type="date" name="offers_start_date" required>
+
+            <label for="offers_end_date">End Date:</label>
+            <input type="date" name="offers_end_date" required>
+
+            <button type="submit">Add Offer</button>
+        </form>
+
+        <!-- Offer List Table -->
+        <h2>Offer List</h2>
+        <form action="/delete_offers" method="POST"> <!-- Form for deleting offers -->
+            <table class="offer-table" id="offerTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Offer ID</th>
+                        <th>Offer Type</th>
+                        <th>Offer Details</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer in offers %}
+                    <tr>
+                        <td><input type="checkbox" name="offer_ids" value="{{ offer[0] }}"></td> <!-- Checkbox for each offer -->
+                        <td>{{ offer[0] }}</td>
+                        <td>{{ offer[1] }}</td>
+                        <td>{{ offer[2] }}</td>
+                        <td>{{ offer[3] }}</td>
+                        <td>{{ offer[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Offers</button>
+            <button type="submit" formaction="/edit_offers" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Offers</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter offers in the table
+        function filterOffers() {
+            const input = document.getElementById('offerSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('offerTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

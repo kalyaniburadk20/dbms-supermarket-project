@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Manager Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Block Manager Dashboard</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Welcome, Block Manager!</h2>
+        <p>You can manage the following:</p>
+        <ul>
+            <li><a href="/blocks">View Blocks</a></li>
+            <li><a href="/products">Manage Products</a></li>
+            <li><a href="/inventory">View Inventory</a></li>
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2024 Supermarket Management System</p>
+    </footer>
+</body>
+</html>

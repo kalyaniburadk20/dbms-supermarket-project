@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Employees</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='employee.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Employees</h1>
+            <div class="search-container">
+                <input type="text" id="employeeSearch" placeholder="Search Employees..." onkeyup="filterEmployees()">
+            </div>
+    
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Add New Employee Form -->
+        <h2>Add New Employee</h2>
+        <form action="/add_employee" method="POST" class="employee-form">
+            <label for="employee_id">Employee ID:</label>
+            <input type="text" name="employee_id" required>
+
+            <label for="employee_name">Name:</label>
+            <input type="text" name="employee_name" required>
+
+            <label for="employee_contact">Contact:</label>
+            <input type="text" name="employee_contact" required>
+
+            <label for="employee_dob">Date of Birth:</label>
+            <input type="date" name="employee_dob" required>
+
+            <label for="employee_email">Email:</label>
+            <input type="email" name="employee_email" required>
+
+            <label for="employee_address">Address:</label>
+            <input type="text" name="employee_address" required>
+
+            <label for="gender">Gender:</label>
+            <select name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+
+            <button type="submit">Add Employee</button>
+        </form>
+
+       
+        <!-- Employee List Table -->
+        <h2>Employee List</h2>
+        <form action="/delete_employees" method="POST"> <!-- Form for deleting employees -->
+            <table class="employee-table" id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Date of Birth</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Gender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td><input type="checkbox" name="employee_ids" value="{{ employee[0] }}"></td> <!-- Checkbox for each employee -->
+                        <td>{{ employee[0] }}</td>
+                        <td>{{ employee[1] }}</td>
+                        <td>{{ employee[2] }}</td>
+                        <td>{{ employee[3] }}</td>
+                        <td>{{ employee[4] }}</td>
+                        <td>{{ employee[5] }}</td>
+                        <td>{{ employee[6] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Employees</button>
+            <button type="submit" formaction="/edit_employees" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Employees</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter employees in the table
+        function filterEmployees() {
+            const input = document.getElementById('employeeSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('employeeTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+         

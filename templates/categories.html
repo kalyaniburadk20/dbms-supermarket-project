@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Categories</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='category.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Categories</h1>
+            <div class="search-container">
+                <input type="text" id="categorySearch" placeholder="Search Categories..." onkeyup="filterCategories()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Category Form -->
+        <h2>Add New Category</h2>
+        <form action="/add_category" method="POST" class="category-form">
+            <label for="category_id">Category ID:</label>
+            <input type="text" name="category_id" required>
+
+            <label for="category_name">Category Name:</label>
+            <input type="text" name="category_name" required>
+
+            <label for="store_id">Store ID:</label>
+            <input type="text" name="store_id" required>
+
+            <label for="warehouse_no">Warehouse Number:</label>
+            <input type="text" name="warehouse_no">
+
+            <button type="submit">Add Category</button>
+        </form>
+
+        <!-- Category List Table -->
+        <h2>Category List</h2>
+        <form action="/delete_categories" method="POST"> <!-- Form for deleting categories -->
+            <table class="category-table" id="categoryTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Category ID</th>
+                        <th>Category Name</th>
+                        <th>Store ID</th>
+                        <th>Warehouse Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td><input type="checkbox" name="category_ids" value="{{ category[0] }}"></td> <!-- Checkbox for each category -->
+                        <td>{{ category[0] }}</td>
+                        <td>{{ category[1] }}</td>
+                        <td>{{ category[2] }}</td>
+                        <td>{{ category[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Categories</button>
+            <button type="submit" formaction="/edit_categories" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Categories</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter categories in the table
+        function filterCategories() {
+            const input = document.getElementById('categorySearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('categoryTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

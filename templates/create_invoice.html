@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Invoice</title>
+    <link rel="stylesheet" href="cashier.css">
+</head>
+<body>
+    <div class="invoice-form">
+        <h2>Create Invoice</h2>
+        <form id="invoiceForm">
+            <label for="customer">Select Customer:</label>
+            <select id="customer" name="customer_id">
+                <!-- Dynamic customer list -->
+            </select>
+
+            <label for="product">Select Product:</label>
+            <select id="product" name="product_id">
+                <!-- Dynamic product list -->
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+
+            <button type="button" onclick="addProduct()">Add Product</button>
+
+            <div id="productList">
+                <!-- Products added for the invoice will be displayed here -->
+            </div>
+
+            <h3>Total: <span id="totalAmount">0.00</span></h3>
+            <button type="submit">Generate Invoice</button>
+        </form>
+    </div>
+
+    <h3>Total: <span id="totalAmount">0.00</span></h3>
+<button type="submit" onclick="printInvoice()">Print Invoice</button>
+
+    <script>
+        // Sample tax and discount rates
+const TAX_RATE = 0.1; // 10%
+const CUSTOMER_DISCOUNT = {
+    "VIP": 0.2,  // 20% for VIPs
+    "Regular": 0.05 // 5% for Regular customers
+};
+
+// Placeholder for selected products
+let invoiceItems = [];
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadCustomers();
+    loadProducts();
+});
+
+// Fetch customer data from database
+function loadCustomers() {
+    fetch("/get_customers")  // Backend route in app.py to fetch customer data
+        .then(response => response.json())
+        .then(customers => {
+            const customerSelect = document.getElementById("customer");
+            customers.forEach(customer => {
+                let option = document.createElement("option");
+                option.value = customer.customer_id;
+                option.text = customer.customer_name;
+                option.dataset.type = customer.customer_type_id; // Needed for discount
+                customerSelect.appendChild(option);
+            });
+        });
+}
+
+// Fetch product data from database
+function loadProducts() {
+    fetch("/get_products")  // Backend route in app.py to fetch product data
+        .then(response => response.json())
+        .then(products => {
+            const productSelect = document.getElementById("product");
+            products.forEach(product => {
+                let option = document.createElement("option");
+                option.value = product.product_id;
+                option.text = `${product.brand} - $${product.selling_price}`;
+                option.dataset.price = product.selling_price;
+                option.dataset.offer = product.offer_id; // Needed for offers
+                productSelect.appendChild(option);
+            });
+        });
+}
+
+// Add product to invoice list
+function addProduct() {
+    const productSelect = document.getElementById("product");
+    const quantity = document.getElementById("quantity").value;
+
+    const selectedOption = productSelect.options[productSelect.selectedIndex];
+    const price = parseFloat(selectedOption.dataset.price);
+    const productId = selectedOption.value;
+    const productText = selectedOption.text;
+
+    if (!productId || !quantity) return;
+
+    invoiceItems.push({ productId, productText, quantity, price });
+    updateInvoice();
+}
+
+// Update invoice with added products
+function updateInvoice() {
+    const productList = document.getElementById("productList");
+    productList.innerHTML = "";  // Clear previous entries
+
+    let totalAmount = 0;
+
+    invoiceItems.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        totalAmount += itemTotal;
+
+        let div = document.createElement("div");
+        div.classList.add("product-item");
+        div.innerHTML = `${item.productText} - Qty: ${item.quantity} - $${itemTotal.toFixed(2)}`;
+        productList.appendChild(div);
+    });
+
+    const customerType = document.getElementById("customer").selectedOptions[0].dataset.type;
+    const discountRate = CUSTOMER_DISCOUNT[customerType] || 0;
+    const discount = totalAmount * discountRate;
+    const tax = (totalAmount - discount) * TAX_RATE;
+    const finalAmount = totalAmount - discount + tax;
+
+    document.getElementById("totalAmount").textContent = finalAmount.toFixed(2);
+}
+
+// Generate printable invoice
+function printInvoice() {
+    let invoiceContent = `<h1>Invoice</h1>`;
+    invoiceItems.forEach(item => {
+        invoiceContent += `<p>${item.productText} - Qty: ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</p>`;
+    });
+    invoiceContent += `<h3>Total: $${document.getElementById("totalAmount").textContent}</h3>`;
+    const newWindow = window.open();
+    newWindow.document.write(invoiceContent);
+    newWindow.print();
+    newWindow.close();
+}
+
+    </script>
+</body>
+</html>

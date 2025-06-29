@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Payment Modes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='payment_mode.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Payment Modes</h1>
+            <div class="search-container">
+                <input type="text" id="paymentModeSearch" placeholder="Search Payment Modes..." onkeyup="filterPaymentModes()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Payment Mode Form -->
+        <h2>Add New Payment Mode</h2>
+        <form action="/add_payment_mode" method="POST" class="payment-mode-form">
+            <label for="payment_mode_id">Payment Mode ID:</label>
+            <input type="text" name="payment_mode_id" required>
+
+            <label for="mode_of_payment">Mode of Payment:</label>
+            <input type="text" name="mode_of_payment" required>
+
+            <label for="offer_id">Offer ID:</label>
+            <input type="text" name="offer_id">
+
+            <button type="submit">Add Payment Mode</button>
+        </form>
+
+        <!-- Payment Mode List Table -->
+        <h2>Payment Mode List</h2>
+        <form action="/delete_payment_modes" method="POST"> <!-- Form for deleting payment modes -->
+            <table class="payment-mode-table" id="paymentModeTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Payment Mode ID</th>
+                        <th>Mode of Payment</th>
+                        <th>Offer ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment_mode in payment_modes %}
+                    <tr>
+                        <td><input type="checkbox" name="payment_mode_ids" value="{{ payment_mode[0] }}"></td> <!-- Checkbox for each payment mode -->
+                        <td>{{ payment_mode[0] }}</td>
+                        <td>{{ payment_mode[1] }}</td>
+                        <td>{{ payment_mode[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Payment Modes</button>
+            <button type="submit" formaction="/edit_payment_modes" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Payment Modes</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter payment modes in the table
+        function filterPaymentModes() {
+            const input = document.getElementById('paymentModeSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('paymentModeTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

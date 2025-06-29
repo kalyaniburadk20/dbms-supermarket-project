@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Movement</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='track_movement.css') }}">
+</head>
+<body>
+
+    <div>
+    <div class="track-movement-container">
+        <h2>Track Product Movement</h2>
+
+        <form id="transfer-form" action="{{ url_for('submit_transfer') }}" method="POST">
+            <label for="block">Block:</label>
+            <input type="text" id="block" name="block" placeholder="Enter block name or ID" autocomplete="off">
+            <div id="block-suggestions" class="suggestions"></div>
+
+            <label for="product">Product:</label>
+            <input type="text" id="product" name="product" placeholder="Enter product name or ID" autocomplete="off" oninput="showProductSuggestions(this.value)">
+            <div id="product-suggestions" class="suggestions"></div>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required min="1">
+
+            <!-- Submit button with pointer style applied -->
+            <button type="submit" id="submit-transfer-btn">Submit Transfer</button>
+        </form>
+
+        
+    </div>
+
+    <!-- Product Movement History Table -->
+    <div class="past-transfers-container">
+        <h2>Past Product Transfers</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Block Name</th>
+                    <th>Product ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transfer in past_transfers %}
+                    <tr>
+                        <td>{{ transfer.block_name }}</td>
+                        <td>{{ transfer.product_id }}</td>
+                        <td>{{ transfer.transfer_date }}</td>
+                        <td>{{ transfer.transfer_time }}</td>
+                        <td>{{ transfer.quantity }}</td>
+                        <td>{{ transfer.transfer_status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+
+    <script>
+        document.getElementById('submit-transfer-btn').style.cursor = 'pointer';
+
+        document.getElementById('block').addEventListener('input', function () {
+            const query = this.value;
+            fetch(`/get_block_suggestions?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let suggestions = document.getElementById('block-suggestions');
+                    suggestions.innerHTML = '';
+                    data.forEach(item => {
+                        let div = document.createElement('div');
+                        div.innerText = item;
+                        div.onclick = () => {
+                            document.getElementById('block').value = item;
+                            suggestions.innerHTML = '';
+                        };
+                        suggestions.appendChild(div);
+                    });
+                });
+        });
+
+        function showProductSuggestions(query) {
+            const suggestionsContainer = document.getElementById('product-suggestions');
+            fetch(`/get_product_suggestions?term=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+                    data.forEach(item => {
+                        let div = document.createElement('div');
+                        div.innerText = `${item.id} - ${item.type} ($${item.price})`;
+                        div.onclick = () => {
+                            document.getElementById('product').value = item.id;
+                            suggestionsContainer.innerHTML = '';
+                        };
+                        suggestionsContainer.appendChild(div);
+                    });
+                });
+        }
+    </script>
+</body>
+</html>

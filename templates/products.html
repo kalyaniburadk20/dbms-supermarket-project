@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Products</h1>
+            <div class="search-container">
+                <input type="text" id="productSearch" placeholder="Search Products..." onkeyup="filterProducts()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Product Form -->
+        <h2>Add New Product</h2>
+        <form action="/add_product" method="POST" class="product-form">
+            <label for="product_id">Product ID:</label>
+            <input type="text" name="product_id" required>
+
+            <label for="product_type">Product Type:</label>
+            <input type="text" name="product_type" required>
+
+            <label for="brand">Brand:</label>
+            <input type="text" name="brand" required>
+
+            <label for="cost_price">Cost Price:</label>
+            <input type="number" step="0.01" name="cost_price" required>
+
+            <label for="weight">Weight:</label>
+            <input type="text" name="weight" required>
+
+            <label for="selling_price">Selling Price:</label>
+            <input type="number" step="0.01" name="selling_price" required>
+
+            <label for="category_id">Category ID:</label>
+            <input type="text" name="category_id">
+
+            <label for="offer_id">Offer ID:</label>
+            <input type="text" name="offer_id">
+
+            <label for="block_count">Block Count:</label>
+            <input type="number" name="block_count" required>
+
+            <label for="warehouse_count">Warehouse Count:</label>
+            <input type="number" name="warehouse_count" required>
+
+            <button type="submit">Add Product</button>
+        </form>
+
+
+    </div>
+
+    <div>
+                <!-- Product List Table -->
+                <h2>Product List</h2>
+                <form action="/delete_products" method="POST"> <!-- Form for deleting products -->
+                    <table class="product-table" id="productTable">
+                        <thead>
+                            <tr>
+                                <th>Select</th> <!-- New column for checkboxes -->
+                                <th>Product ID</th>
+                                <th>Product Type</th>
+                                <th>Brand</th>
+                                <th>Cost Price</th>
+                                <th>Weight</th>
+                                <th>Selling Price</th>
+                                <th>Category ID</th>
+                                <th>Offer ID</th>
+                                <th>Block Count</th>
+                                <th>Warehouse Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td><input type="checkbox" name="product_ids" value="{{ product[0] }}"></td> <!-- Checkbox for each product -->
+                                <td>{{ product[0] }}</td>
+                                <td>{{ product[1] }}</td>
+                                <td>{{ product[2] }}</td>
+                                <td>{{ product[3] }}</td>
+                                <td>{{ product[4] }}</td>
+                                <td>{{ product[5] }}</td>
+                                <td>{{ product[6] }}</td>
+                                <td>{{ product[7] }}</td>
+                                <td>{{ product[8] }}</td>
+                                <td>{{ product[9] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Products</button>
+                    <button type="submit" formaction="/edit_products" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Products</button>
+                </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter products in the table
+        function filterProducts() {
+            const input = document.getElementById('productSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('productTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

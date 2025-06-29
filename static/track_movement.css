@@ -1,0 +1,202 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #4a90e2, #9013fe); /* Deep blue to purple gradient */
+    background-attachment: fixed;
+    
+    
+}
+
+h2{
+    font-size: 2.5em;
+    color: #4a90e2; /* Highlighted blue to match the theme */
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.track-movement-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width : 800px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: #4a90e2;
+    margin: 0 15px;
+    font-size: 1.1em;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+
+}
+
+input, button {
+    width: 80%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    border-radius: 4px;
+    border: 1px solid #9013fe ;
+}
+
+button{
+
+    background: linear-gradient(135deg, #4a90e2, #9013fe);
+    width: 50%;
+    color: aliceblue;
+    font-size: 20px;
+}
+
+button:hover{
+  background:  linear-gradient(135deg, #9013fe, #4a90e2);
+    
+}
+.suggestions {
+    max-height: 100px;
+    overflow-y: auto;
+    top: 100%;
+    background: linear-gradient(135deg, #9013fe40, #4a91e233) ;
+    max-height: 150px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position:relative;
+    width: 100%;
+
+}
+
+.suggestions div {
+    padding: 8px;
+    cursor: pointer;
+}
+.suggestions div:hover{
+    background: linear-gradient(135deg, #9013fe40, #4a91e233);
+    width: 98%;
+}
+
+
+/* Custom scrollbar style */
+.suggestions::-webkit-scrollbar {
+    width: 10px; /* Set width of the scrollbar */
+}
+
+.suggestions::-webkit-scrollbar-thumb {
+    background-color: #4a90e2; /* Set the thumb (scrollbar) color to blue */
+    border-radius: 10px;
+    border: 2px solid #9013fe; /* Optional: border to give a more distinct appearance */
+}
+
+.suggestions::-webkit-scrollbar-track {
+    background: rgba(206, 1, 234, 0.201); /* Optional: set background for the track */
+}
+
+/* track_movement.css */
+.hidden {
+    display: none;
+}
+
+#animation-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+#flying-product {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: #ff5733; /* Example color */
+    border-radius: 50%;
+    animation: fly 2s ease-in-out forwards;
+}
+
+@keyframes fly {
+    0% {
+        top: 0;
+        left: 0;
+    }
+    100% {
+        top: -200px;
+        left: 200px; /* Adjust according to your UI */
+    }
+}
+
+#completion-message {
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    margin-top: 20px;
+}
+/* Transfer History Page Container */
+.past-transfers-container {
+    background-color: #fff;
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 30px auto;
+    max-width: 1000px;
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #4a90e2;
+    color: white;
+    font-size: 1.1em;
+}
+
+table td {
+    font-size: 1em;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Header Styling for Transfer History */
+h2 {
+    font-size: 2em;
+    color: #4a90e2;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

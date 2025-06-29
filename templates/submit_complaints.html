@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaints - RisingBird Supermarket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='submit_complaints.css') }}">
+    <script src="{{ url_for('static', filename='submit_complaints.js') }}"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Submit Complaints - RisingBird Supermarket</h1>
+        <nav>
+            <a href="{{ url_for('warehouse_manager_dashboard') }}">Back to Dashboard</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="complaint-form-section">
+            <h2>Submit a Complaint to a Supplier</h2>
+            <form action="{{ url_for('submit_complaints') }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="supplier">Select Supplier:</label>
+                    <select id="supplier" name="supplier" required>
+                        <option value="" disabled selected>Choose a supplier</option>
+                        <option value="amazon">Amazon Business</option>
+                        <option value="alibaba">Alibaba</option>
+                        <option value="costco">Costco Wholesale Business Center</option>
+                        <option value="sysco">Sysco</option>
+                        <option value="walmart">Walmart Business</option>
+                        <option value="samsclub">Sam's Club</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product">Product:</label>
+                    <input type="text" id="product" name="product" placeholder="Enter product name or ID" autocomplete="off" oninput="showProductSuggestions(this.value)">
+                    <div id="product-suggestions" class="suggestions"></div>
+                </div>
+                
+                
+
+
+                <!-- <div class="form-group">
+                    <label for="product">Product Affected:</label>
+                    <input type="text" id="product" name="product" placeholder="Enter product name or ID" required>
+                </div> -->
+
+                <div class="form-group">
+                    <label for="issue">Type of Issue:</label>
+                    <select id="issue" name="issue" required>
+                        <option value="damaged">Damaged Product</option>
+                        <option value="defective">Defective Product</option>
+                        <option value="incorrect">Incorrect Product</option>
+                        <option value="delayed">Delayed Delivery</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Detailed Description:</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Describe the issue in detail..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="attachments">Attach Evidence (Optional):</label>
+                    <input type="file" id="attachments" name="attachments" accept="image/*,application/pdf">
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">Priority Level:</label>
+                    <select id="priority" name="priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-button">Submit Complaint</button>
+            </form>
+        </section>
+    </main>
+      
+        <section class="past-complaints">
+            <h2>Previous Complaints</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Supplier</th>
+                        <th>Product Name</th>
+                        <th>Attachment</th>
+                        <th>Description</th>
+                        <th>Issue</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic content loaded with previous complaints -->
+                    {% for complaint in past_complaints %}
+                        <tr>
+                            <td>{{ complaint.date }}</td>
+                            <td>{{ complaint.supplier }}</td>
+                            <td>{{ complaint.product_name }}</td>
+                            <td>
+                                {% if complaint.attachment_path %}
+                                    <a href="{{ url_for('static', filename=complaint.attachment_path) }}" target="_blank">View Attachment</a>
+                                {% else %}
+                                    No attachment
+                                {% endif %}
+                            </td>
+                            <td>{{ complaint.description }}</td>
+                            <td>{{ complaint.issue }}</td>
+                            <td>{{ complaint.status }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+  
+
+    <script>
+
+function showProductSuggestions(query) {
+    const suggestionsContainer = document.getElementById('product-suggestions');
+    fetch(`/get_product_suggestions?term=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+            data.forEach(item => {
+                let div = document.createElement('div');
+                div.innerText = `${item.id} - ${item.type} ($${item.price})`;
+                div.onclick = () => {
+                    document.getElementById('product').value = item.id;
+                    suggestionsContainer.innerHTML = '';
+                };
+                suggestionsContainer.appendChild(div);
+            });
+        });
+}
+
+    </script>
+</body>
+</html>

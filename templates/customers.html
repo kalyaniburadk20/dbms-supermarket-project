@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='customer.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Customers</h1>
+            <div class="search-container">
+                <input type="text" id="customerSearch" placeholder="Search Customers..." onkeyup="filterCustomers()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Customer Form -->
+        <h2>Add New Customer</h2>
+        <form action="/add_customer" method="POST" class="customer-form">
+            <label for="customer_id">Customer ID:</label>
+            <input type="text" name="customer_id" required>
+
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" name="customer_name" required>
+
+            <label for="customer_contact">Customer Contact:</label>
+            <input type="number" name="customer_contact" required>
+
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" name="date_of_birth" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" required>
+
+            <label for="gender">Gender:</label>
+            <select name="gender" required>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+            </select>
+
+            <label for="customer_type_id">Customer Type ID:</label>
+            <input type="text" name="customer_type_id">
+
+            <label for="membership_to">Membership To:</label>
+            <input type="date" name="membership_to" required>
+
+            <label for="membership_to_from">Membership From:</label>
+            <input type="date" name="membership_to_from" required>
+
+            <button type="submit">Add Customer</button>
+        </form>
+
+ 
+    </div>
+
+    <div>
+               <!-- Customer List Table -->
+        <h2>Customer List</h2>
+        <form action="/delete_customers" method="POST"> <!-- Form for deleting customers -->
+            <table class="customer-table" id="customerTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Customer ID</th>
+                        <th>Customer Name</th>
+                        <th>Contact</th>
+                        <th>Date of Birth</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Gender</th>
+                        <th>Customer Type ID</th>
+                        <th>Membership To</th>
+                        <th>Membership From</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td><input type="checkbox" name="customer_ids" value="{{ customer[0] }}"></td> <!-- Checkbox for each customer -->
+                        <td>{{ customer[0] }}</td>
+                        <td>{{ customer[1] }}</td>
+                        <td>{{ customer[2] }}</td>
+                        <td>{{ customer[3] }}</td>
+                        <td>{{ customer[4] }}</td>
+                        <td>{{ customer[5] }}</td>
+                        <td>{{ customer[6] }}</td>
+                        <td>{{ customer[7] }}</td>
+                        <td>{{ customer[8] }}</td>
+                        <td>{{ customer[9] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Customers</button>
+            <button type="submit" formaction="/edit_customers" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Customers</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter customers in the table
+        function filterCustomers() {
+            const input = document.getElementById('customerSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('customerTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

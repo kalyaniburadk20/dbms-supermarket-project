@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Blocks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='block.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Blocks</h1>
+            <div class="search-container">
+                <input type="text" id="blockSearch" placeholder="Search Blocks..." onkeyup="filterBlocks()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Block Form -->
+        <h2>Add New Block</h2>
+        <form action="/add_block" method="POST" class="block-form">
+            <label for="block_id">Block ID:</label>
+            <input type="text" name="block_id" required>
+
+            <label for="block_name">Block Name:</label>
+            <input type="text" name="block_name" required>
+
+            <label for="block_incharge_id">Block Incharge ID:</label>
+            <input type="text" name="block_incharge_id">
+
+            <button type="submit">Add Block</button>
+        </form>
+
+        <!-- Block List Table -->
+        <h2>Block List</h2>
+        <form action="/delete_blocks" method="POST"> <!-- Form for deleting blocks -->
+            <table class="block-table" id="blockTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Block ID</th>
+                        <th>Block Name</th>
+                        <th>Block Incharge ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for block in blocks %}
+                    <tr>
+                        <td><input type="checkbox" name="block_ids" value="{{ block[0] }}"></td> <!-- Checkbox for each block -->
+                        <td>{{ block[0] }}</td>
+                        <td>{{ block[1] }}</td>
+                        <td>{{ block[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Blocks</button>
+            <button type="submit" formaction="/edit_blocks" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Blocks</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter blocks in the table
+        function filterBlocks() {
+            const input = document.getElementById('blockSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('blockTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

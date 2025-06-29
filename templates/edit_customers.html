@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='edit_customers.css') }}">
+</head>
+
+<style>
+    /* Universal Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f8fb; /* Light blue-gray background */
+    margin-top: 100px;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Go Back Button Styling */
+.back-link {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.back-link img {
+    width: 40px;
+    height: 40px;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the title */
+    background-color: #007bff;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0; /* Ensure it starts from the left */
+    width: 100%; /* Full width */
+    z-index: 1000;
+    color: white;
+    transition: background-color 0.3s ease;
+    padding: 0 20px; /* Padding on left and right */
+    overflow: hidden; /* Prevent overflow */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Subtle shadow for a 'shining' effect */
+}
+
+.header h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+    margin: 0;
+}
+
+/* Container Styling */
+.container {
+    background-color: white; /* White background for container */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #007bff; /* Label color matching theme */
+}
+
+input[type="text"],
+select {
+    padding: 10px;
+    border: 1px solid #cce4ff; /* Light blue border */
+    border-radius: 5px;
+    margin-bottom: 15px; /* Space between inputs */
+    background-color: #f0f8ff; /* Light blue background for inputs */
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #1976d2; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(25, 118, 210, 0.3); /* Focus shadow */
+    outline: none;
+}
+
+/* Button Styling */
+button {
+    background-color: #1976d2; /* Button color */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+button:hover {
+    background-color: #145a86; /* Darker blue on hover */
+}
+
+/* Customer Edit Styling */
+.customer-edit {
+    margin-bottom: 20px; /* Space between customer edit sections */
+}
+
+.customer-edit h3 {
+    margin-bottom: 10px; /* Space below customer ID heading */
+}
+
+/* Horizontal Rule Styling */
+hr {
+    margin: 20px 0; /* Space around horizontal line */
+    border: 0;
+    height: 1px;
+    background-color: #cce4ff; /* Light blue */
+}
+
+input[list] {
+    width: 36%; /* Ensure the input takes up full width */
+    padding: 10px;
+    border: 1px solid #cce4ff;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-color: #f0f8ff;
+}
+
+input[list]:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
+    outline: none;
+}
+
+
+</style>
+<body>
+    <div class="header">
+        <a href="/customers" class="back-link">
+            <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Go Back">
+        </a>   
+        <h1>Edit Customers</h1>
+    </div>
+
+    <div class="container">
+        <form action="/update_customers" method="POST">
+            {% for customer in customers %}
+            <div class="customer-edit">
+                <h3>Customer ID: {{ customer[0] }}</h3>
+                <label>Name:</label>
+                <input type="text" name="name-{{ customer[0] }}" value="{{ customer[1] }}" required>
+
+                <label>Contact:</label>
+                <input type="text" name="contact-{{ customer[0] }}" value="{{ customer[2] }}" required>
+
+                <label>Date of Birth:</label>
+                <input type="date" name="dob-{{ customer[0] }}" value="{{ customer[3] }}" required>
+
+                <label>Email:</label>
+                <input type="email" name="email-{{ customer[0] }}" value="{{ customer[4] }}" required>
+
+                <label>Address:</label>
+                <input type="text" name="address-{{ customer[0] }}" value="{{ customer[5] }}" required>
+
+                <label>Gender:</label>
+                <select name="gender-{{ customer[0] }}" required>
+                    <option value="male" {% if customer[6] == 'male' %}selected{% endif %}>Male</option>
+                    <option value="female" {% if customer[6] == 'female' %}selected{% endif %}>Female</option>
+                </select>
+<!-- 
+                <label>Customer Type ID:</label>
+                <input type="text" name="type_id-{{ customer[0] }}" value="{{ customer[7] }}"> -->
+
+
+                <!-- Customer Type ID Field with Suggestions -->
+                <label>Customer Type ID:</label>
+                <input type="text" name="type_id-{{ customer[0] }}" id="type_id-{{ customer[0] }}" list="customer-types-{{ customer[0] }}" value="{{ customer[7] }}" required>
+                <datalist id="customer-types-{{ customer[0] }}">
+                    {% for type in customer_types %}
+                        <option value="{{ type[0] }}">{{ type[0] }} - {{ type[1] }}</option>
+                    {% endfor %}
+                </datalist>
+
+
+                <label>Membership To:</label>
+                <input type="date" name="membership_to-{{ customer[0] }}" value="{{ customer[8] }}" required>
+
+                <label>Membership From:</label>
+                <input type="date" name="membership_from-{{ customer[0] }}" value="{{ customer[9] }}" required>
+            </div>
+            <hr>
+            {% endfor %}
+            <button type="submit" style="background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Update Customers</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Warehouses</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='warehouse.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Warehouses</h1>
+            <div class="search-container">
+                <input type="text" id="warehouseSearch" placeholder="Search Warehouses..." onkeyup="filterWarehouses()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Warehouse Form -->
+        <h2>Add New Warehouse</h2>
+        <form action="/add_warehouse" method="POST" class="warehouse-form">
+            <label for="warehouse_no">Warehouse Number:</label>
+            <input type="text" name="warehouse_no" required>
+
+            <label for="warehouse_name">Warehouse Name:</label>
+            <input type="text" name="warehouse_name" required>
+
+            <button type="submit">Add Warehouse</button>
+        </form>
+
+        <!-- Warehouse List Table -->
+        <h2>Warehouse List</h2>
+        <form action="/delete_warehouses" method="POST"> <!-- Form for deleting warehouses -->
+            <table class="warehouse-table" id="warehouseTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Warehouse Number</th>
+                        <th>Warehouse Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for warehouse in warehouses %}
+                    <tr>
+                        <td><input type="checkbox" name="warehouse_nos" value="{{ warehouse[0] }}"></td> <!-- Checkbox for each warehouse -->
+                        <td>{{ warehouse[0] }}</td>
+                        <td>{{ warehouse[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Warehouses</button>
+            <button type="submit" formaction="/edit_warehouses" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Warehouses</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter warehouses in the table
+        function filterWarehouses() {
+            const input = document.getElementById('warehouseSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('warehouseTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

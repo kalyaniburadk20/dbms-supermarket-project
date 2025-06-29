@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customer Types</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='customer_type.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Customer Types</h1>
+            <div class="search-container">
+                <input type="text" id="typeSearch" placeholder="Search Customer Types..." onkeyup="filterTypes()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Customer Type Form -->
+        <h2>Add New Customer Type</h2>
+        <form action="/add_customer_type" method="POST" class="type-form">
+            <label for="type_id">Type ID:</label>
+            <input type="text" name="type_id" required>
+
+            <label for="type_name">Type Name:</label>
+            <input type="text" name="type_name" required>
+
+            <button type="submit">Add Customer Type</button>
+        </form>
+
+        <!-- Customer Type List Table -->
+        <h2>Customer Type List</h2>
+        <form action="/delete_customer_types" method="POST"> <!-- Form for deleting customer types -->
+            <table class="type-table" id="typeTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Type ID</th>
+                        <th>Type Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer_type in customer_types %}
+                    <tr>
+                        <td><input type="checkbox" name="type_ids" value="{{ customer_type[0] }}"></td> <!-- Checkbox for each customer type -->
+                        <td>{{ customer_type[0] }}</td>
+                        <td>{{ customer_type[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Customer Types</button>
+            <button type="submit" formaction="/edit_customer_types" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Customer Types</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter customer types in the table
+        function filterTypes() {
+            const input = document.getElementById('typeSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('typeTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

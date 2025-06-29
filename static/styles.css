@@ -1,0 +1,152 @@
+* {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('AdobeStock_6.jpeg'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(4px); /* Slight blur for focus on form */
+    z-index: -1;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    color: white;
+    padding: 0 20px;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.header h1 {
+    font-weight: bold;
+    font-size: 30px;
+    margin-left: 100px;
+    margin-right: 20px;
+    flex-grow: 1;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.back-link img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.back-link img:hover {
+    transform: scale(1.5);  /* Increase size of the icon on hover */
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5); /* Glow effect */
+}
+
+.container {
+    margin-top: 100px;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    animation: fadeInContainer 1s ease-in-out;
+}
+
+.link-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    animation: slideIn 1s ease-in-out;
+}
+
+.link-box {
+    width: 48%;
+    background: linear-gradient(45deg, #007bff7d, #0056b3);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    overflow: hidden;
+}
+
+.link-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 123, 255, 0.4);
+    background: linear-gradient(45deg, #0056b3, #003b73); /* Darker gradient on hover */
+}
+
+.box-link {
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 10px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.box-link:hover {
+    background-color: #003b73;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+    transform: scale(1.1);  /* Slightly enlarge the text on hover */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInContainer {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .link-box {
+        width: 100%; /* Make each section stack on smaller screens */
+    }
+}

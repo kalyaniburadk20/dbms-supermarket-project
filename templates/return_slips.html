@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Return Slips</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='returnslip.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Return Slips</h1>
+            <div class="search-container">
+                <input type="text" id="returnSlipSearch" placeholder="Search Return Slips..." onkeyup="filterReturnSlips()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Return Slip Form -->
+        <h2>Add New Return Slip</h2>
+        <form action="/add_returnslip" method="POST" class="returnslip-form">
+            <label for="slip_no">Slip No:</label>
+            <input type="text" name="slip_no" required>
+
+            <label for="inv_id">Invoice ID:</label>
+            <input type="text" name="inv_id" required>
+
+            <label for="product_id">Product ID:</label>
+            <input type="text" name="product_id" required>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" min="1" required>
+
+            <label for="return_date">Return Date:</label>
+            <input type="date" name="return_date" required>
+
+            <button type="submit">Add Return Slip</button>
+        </form>
+
+        <!-- Return Slips List Table -->
+        <h2>Return Slips List</h2>
+        <form action="/delete_returnslip" method="POST"> <!-- Form for deleting return slips -->
+            <table class="returnslip-table" id="returnSlipTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Slip No</th>
+                        <th>Invoice ID</th>
+                        <th>Product ID</th>
+                        <th>Quantity</th>
+                        <th>Return Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for returnslip in returnslips %}
+                    <tr>
+                        <td><input type="checkbox" name="returnslip_ids" value="{{ returnslip[0] }}|{{ returnslip[2] }}"></td> <!-- Checkbox for each return slip -->
+                        <td>{{ returnslip[0] }}</td>
+                        <td>{{ returnslip[1] }}</td>
+                        <td>{{ returnslip[2] }}</td>
+                        <td>{{ returnslip[3] }}</td>
+                        <td>{{ returnslip[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Return Slips</button>
+            <button type="submit" formaction="/edit_returnslip" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Return Slips</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter return slips in the table
+        function filterReturnSlips() {
+            const input = document.getElementById('returnSlipSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('returnSlipTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

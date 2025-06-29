@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Feedback</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='feedback.css') }}">
+</head>
+<body>
+    <div>
+        <div class="header">
+            <h1>Manage Feedback</h1>
+            <div class="search-container">
+                <input type="text" id="feedbackSearch" placeholder="Search Feedback..." onkeyup="filterFeedback()">
+            </div>
+            <a class="back-link" href="/admin_dashboard">
+                <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Back">
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add New Feedback Form -->
+        <h2>Add New Feedback</h2>
+        <form action="/add_feedback" method="POST" class="feedback-form">
+            <label for="review_id">Review ID:</label>
+            <input type="text" name="review_id" required>
+
+            <label for="review_text">Review Text:</label>
+            <input type="text" name="review_text" required>
+
+            <label for="rating">Rating:</label>
+            <input type="number" name="rating" min="1" max="5" required>
+
+            <label for="review_date">Review Date:</label>
+            <input type="date" name="review_date" required>
+
+            <label for="cust_id">Customer ID:</label>
+            <input type="text" name="cust_id">
+
+            <label for="invoice_id">Invoice ID:</label>
+            <input type="text" name="invoice_id">
+
+            <button type="submit">Add Feedback</button>
+        </form>
+
+        <!-- Feedback List Table -->
+        <h2>Feedback List</h2>
+        <form action="/delete_feedback" method="POST"> <!-- Form for deleting feedback -->
+            <table class="feedback-table" id="feedbackTable">
+                <thead>
+                    <tr>
+                        <th>Select</th> <!-- New column for checkboxes -->
+                        <th>Review ID</th>
+                        <th>Review Text</th>
+                        <th>Rating</th>
+                        <th>Review Date</th>
+                        <th>Customer ID</th>
+                        <th>Invoice ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feedback in feedbacks %}
+                    <tr>
+                        <td><input type="checkbox" name="feedback_ids" value="{{ feedback[0] }}"></td> <!-- Checkbox for each feedback -->
+                        <td>{{ feedback[0] }}</td>
+                        <td>{{ feedback[1] }}</td>
+                        <td>{{ feedback[2] }}</td>
+                        <td>{{ feedback[3] }}</td>
+                        <td>{{ feedback[4] }}</td>
+                        <td>{{ feedback[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" style="margin-top: 20px; background-color: #3786ee; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Delete Selected Feedback</button>
+            <button type="submit" formaction="/edit_feedback" style="margin-top: 20px; background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Edit Selected Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to filter feedback in the table
+        function filterFeedback() {
+            const input = document.getElementById('feedbackSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('feedbackTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = match ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

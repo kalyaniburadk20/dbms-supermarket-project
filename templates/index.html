@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Supermarket Management System</title>
+</head>
+<body>
+    <h1>Welcome to Supermarket Management System</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('categories') }}">Categories</a></li>
+            <li><a href="{{ url_for('payment_modes') }}">Payment Modes</a></li>
+            <li><a href="{{ url_for('invoice_details') }}">Invoice Details</a></li>
+            <li><a href="{{ url_for('products') }}">Products</a></li>
+            <li><a href="{{ url_for('buys') }}">Buys</a></li>
+            <li><a href="{{ url_for('feedback') }}">Feedback</a></li>
+            <li><a href="{{ url_for('return_slips') }}">Return Slips</a></li>
+            <li><a href="{{ url_for('employees') }}">Ezmployees</a></li>
+            <li><a href="{{ url_for('customer_types') }}">Customer Types</a></li>
+            <li><a href="{{ url_for('offer_details') }}">Offer Details</a></li>
+            <li><a href="{{ url_for('customers') }}">Customers</a></li>
+            <li><a href="{{ url_for('warehouses') }}">Warehouses</a></li>
+            <li><a href="{{ url_for('blocks') }}">Blocks</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Categories</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='edit_categories.css') }}"> -->
+
+    <style>
+        * {
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f8fb; /* Light blue-gray background */
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Go Back Button Styling */
+.back-link {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    display: inline-block;
+}
+
+.back-link img {
+    width: 40px;
+    height: 40px;
+}
+
+/* Fixed Header Styling */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #007bff;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Full width */
+    z-index: 1000;
+    color: white;
+    transition: background-color 0.3s ease;
+    padding: 0 20px; /* Padding on left and right */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Subtle shadow */
+}
+
+.header h1 {
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    font-size: 30px;
+    position: fixed;
+    left: 42%;
+}
+
+/* Main container styling */
+.container {
+    margin-top: 100px; /* Space below the header */
+    width: 100%;
+    max-width: 1000px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styling */
+.category-edit {
+    margin-bottom: 40px;
+    margin-top: 20px; /* Space above each form section */
+}
+
+/* Label styling */
+.category-edit label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #007bff; /* Blue color for labels */
+}
+
+/* Input styling */
+.category-edit input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #cce4ff;
+    border-radius: 5px;
+    background-color: #f0f8ff; /* Light blue background */
+}
+
+/* Focus styling for inputs */
+.category-edit input:focus {
+    border-color: #007bff; /* Blue focus color */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* Button styling */
+.container button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+.container button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Horizontal line styling */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #cce4ff; /* Light blue */
+    margin: 20px 0;
+}
+
+    </style>
+</head>
+<body>
+       
+    <div class="header">
+        <a href="/categories" class="back-link">
+            <img src="{{ url_for('static', filename='back-icon.png') }}" alt="Go Back">
+        </a>   
+        <h1>Edit Categories</h1>
+    </div>
+
+    <div class="container">
+        <!-- <form action="/update_categories" method="POST">
+            {% for category in categories %}
+            <div class="category-edit">
+                <h3>Category ID: {{ category[0] }}</h3>
+                <label>Category Name:</label>
+                <input type="text" name="name-{{ category[0] }}" value="{{ category[1] }}" required>
+
+                <label>Store ID:</label>
+                <input type="text" name="store_id-{{ category[0] }}" value="{{ category[2] }}" required>
+
+                <label>Warehouse No:</label>
+                <input type="text" name="warehouse_no-{{ category[0] }}" value="{{ category[3] }}">
+
+            </div>
+            <hr>
+            {% endfor %}
+            <button type="submit" style="background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Update Categories</button>
+        </form> -->
+
+        <form action="/update_categories" method="POST">
+            {% for category in categories %}
+            <div class="category-edit">
+                <h3>Category ID: {{ category[0] }}</h3>
+                <label>Category Name:</label>
+                <input type="text" name="name-{{ category[0] }}" value="{{ category[1] }}" required>
+        
+                <label>Store ID:</label>
+                <select name="store_id-{{ category[0] }}" required>
+                    {% for store in store_ids %}
+                    <option value="{{ store[0] }}" {% if store[0] == category[2] %}selected{% endif %}>{{ store[0] }}</option>
+                    {% endfor %}
+                </select>
+        
+                <label>Warehouse No:</label>
+                <select name="warehouse_no-{{ category[0] }}">
+                    <option value="">None</option> <!-- Optional for cases with no warehouse -->
+                    {% for warehouse in warehouse_nos %}
+                    <option value="{{ warehouse[0] }}" {% if warehouse[0] == category[3] %}selected{% endif %}>{{ warehouse[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <hr>
+            {% endfor %}
+            <button type="submit" style="background-color: #1976d2; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-transform: uppercase;">Update Categories</button>
+        </form>
+        
+    </div>
+
+</body>
+</html>
